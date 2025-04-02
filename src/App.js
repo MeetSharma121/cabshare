@@ -5,8 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './components/Login';
+import Signup from './components/Signup';
 import BookRide from './pages/BookRide';
 import Profile from './pages/Profile';
 import PrivateRoute from './components/PrivateRoute';
@@ -68,7 +68,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/book-ride" element={<BookRide />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/test" element={<FirebaseTest />} />
