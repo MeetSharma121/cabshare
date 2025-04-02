@@ -14,6 +14,31 @@ import {
   Avatar,
 } from '@mui/material';
 import TaxiIcon from './TaxiIcon';
+import { styled } from '@mui/material/styles';
+
+// Styled components
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  background: 'linear-gradient(45deg, #1a237e 30%, #0d47a1 90%)',
+  position: 'relative',
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '20px',
+    background: 'white',
+    borderRadius: '20px 20px 0 0',
+    transform: 'translateY(50%)',
+  },
+}));
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(0, 4),
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(0, 2),
+  },
+}));
 
 function Navbar() {
   const { currentUser, logout } = useAuth();
@@ -39,9 +64,9 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ background: 'linear-gradient(45deg, #1a237e 30%, #0d47a1 90%)' }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <StyledAppBar position="static">
+      <StyledContainer maxWidth={false}>
+        <Toolbar disableGutters sx={{ py: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
             <TaxiIcon />
             <Typography
@@ -138,8 +163,8 @@ function Navbar() {
             )}
           </Box>
         </Toolbar>
-      </Container>
-    </AppBar>
+      </StyledContainer>
+    </StyledAppBar>
   );
 }
 
