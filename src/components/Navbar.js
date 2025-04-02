@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import {
   AppBar,
   Toolbar,
@@ -8,161 +9,138 @@ import {
   Box,
   Container,
   IconButton,
-  Badge,
   Menu,
   MenuItem,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
+  Avatar,
 } from '@mui/material';
-import ChatIcon from '@mui/icons-material/Chat';
-import { useAuth } from '../contexts/AuthContext';
+import TaxiIcon from './TaxiIcon';
 
-const Navbar = () => {
+function Navbar() {
   const { currentUser, logout } = useAuth();
-  const [chatOpen, setChatOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { id: 1, text: 'Welcome to EasyCab Support! How can we help you?', sender: 'system' },
-  ]);
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleChatOpen = () => setChatOpen(true);
-  const handleChatClose = () => setChatOpen(false);
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      setMessages([
-        ...messages,
-        { id: messages.length + 1, text: message, sender: 'user' },
-        { id: messages.length + 2, text: 'Thank you for your message. Our support team will get back to you shortly.', sender: 'system' },
-      ]);
-      setMessage('');
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Failed to log out:', error);
     }
+    handleClose();
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="lg">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component={RouterLink}
-            to="/"
-            sx={{
-              flexGrow: 1,
-              textDecoration: 'none',
-              color: 'inherit',
-              fontWeight: 700,
-            }}
-          >
-            EasyCab
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            {currentUser ? (
+    <AppBar position="static" sx={{ background: 'linear-gradient(45deg, #1a237e 30%, #0d47a1 90%)' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+            <TaxiIcon />
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                display: { xs: 'none', sm: 'block' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+                ml: 1,
+              }}
+            >
+              EasyCab
+            </Typography>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, display: 'flex', gap: 2 }}>
+            <Button
+              color="inherit"
+              onClick={() => navigate('/')}
+              sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
+            >
+              Home
+            </Button>
+            {currentUser && (
               <>
                 <Button
                   color="inherit"
-                  component={RouterLink}
-                  to="/book-ride"
+                  onClick={() => navigate('/book-ride')}
+                  sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
                 >
                   Book a Ride
                 </Button>
                 <Button
                   color="inherit"
-                  component={RouterLink}
-                  to="/profile"
+                  onClick={() => navigate('/profile')}
+                  sx={{ '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
                 >
                   Profile
                 </Button>
-                <IconButton color="inherit" onClick={handleChatOpen}>
-                  <Badge badgeContent={3} color="error">
-                    <ChatIcon />
-                  </Badge>
-                </IconButton>
-                <Button
-                  color="inherit"
-                  onClick={logout}
+              </>
+            )}
+          </Box>
+
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {currentUser ? (
+              <>
+                <IconButton
+                  onClick={handleMenu}
+                  sx={{ p: 0 }}
                 >
-                  Logout
-                </Button>
+                  <Avatar
+                    alt={currentUser.name || 'User'}
+                    src="/static/images/avatar/1.jpg"
+                    sx={{ width: 32, height: 32 }}
+                  />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={() => { navigate('/profile'); handleClose(); }}>
+                    Profile
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
               </>
             ) : (
               <>
                 <Button
                   color="inherit"
-                  component={RouterLink}
-                  to="/login"
+                  onClick={() => navigate('/login')}
+                  sx={{ mr: 1, '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}
                 >
                   Login
                 </Button>
                 <Button
-                  color="inherit"
-                  component={RouterLink}
-                  to="/register"
+                  variant="contained"
+                  onClick={() => navigate('/signup')}
+                  sx={{
+                    backgroundColor: '#FFD700',
+                    color: '#000',
+                    '&:hover': {
+                      backgroundColor: '#FFC107',
+                    },
+                  }}
                 >
-                  Register
+                  Sign Up
                 </Button>
               </>
             )}
           </Box>
         </Toolbar>
       </Container>
-
-      {/* Chat Dialog */}
-      <Dialog
-        open={chatOpen}
-        onClose={handleChatClose}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>EasyCab Support Chat</DialogTitle>
-        <DialogContent>
-          <List sx={{ maxHeight: 400, overflow: 'auto' }}>
-            {messages.map((msg) => (
-              <React.Fragment key={msg.id}>
-                <ListItem
-                  sx={{
-                    flexDirection: 'column',
-                    alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                  }}
-                >
-                  <ListItemText
-                    primary={msg.text}
-                    sx={{
-                      bgcolor: msg.sender === 'user' ? 'primary.main' : 'grey.200',
-                      color: msg.sender === 'user' ? 'white' : 'text.primary',
-                      borderRadius: 2,
-                      p: 1,
-                      maxWidth: '80%',
-                    }}
-                  />
-                </ListItem>
-                <Divider />
-              </React.Fragment>
-            ))}
-          </List>
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Type your message..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-          />
-          <Button onClick={handleSendMessage} variant="contained">
-            Send
-          </Button>
-        </DialogActions>
-      </Dialog>
     </AppBar>
   );
-};
+}
 
 export default Navbar; 

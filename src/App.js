@@ -13,16 +13,22 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './components/Dashboard';
 import FirebaseTest from './components/FirebaseTest';
 
+// Create a theme instance
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2196f3',
+      main: '#1a237e',
+      light: '#534bae',
+      dark: '#000051',
     },
     secondary: {
-      main: '#f50057',
+      main: '#FFD700',
+      light: '#ffff52',
+      dark: '#c7a600',
     },
     background: {
       default: '#f5f5f5',
+      paper: '#ffffff',
     },
   },
   typography: {
@@ -50,8 +56,16 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
           textTransform: 'none',
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         },
       },
     },
@@ -71,14 +85,14 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/book-ride" element={<BookRide />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/test" element={<FirebaseTest />} />
-            <Route 
-              path="/dashboard" 
+            <Route path="/firebase-test" element={<FirebaseTest />} />
+            <Route
+              path="/dashboard"
               element={
                 <PrivateRoute>
                   <Dashboard />
                 </PrivateRoute>
-              } 
+              }
             />
           </Routes>
         </Router>
