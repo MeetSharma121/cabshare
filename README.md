@@ -60,8 +60,19 @@ const firebaseConfig = {
 ```bash
 npm start
 ```
+Screenshots📸
 
-The application will be available at 🌍 `http://localhost:3000`.
+<img width="500" alt="Screenshot 2025-04-03 at 2 52 54 PM" src="https://github.com/user-attachments/assets/a5c425c8-589b-420f-9d38-5a75c80e6ebd" />
+<img width="500" alt="Screenshot 2025-04-03 at 2 53 51 PM" src="https://github.com/user-attachments/assets/ec661676-f50c-49bd-8da7-ea3e7917db7f" />
+<img width="500" alt="Screenshot 2025-04-03 at 2 53 37 PM" src="https://github.com/user-attachments/assets/d39f7f8f-639b-4f52-969f-d03a6ec7bd71" />
+<img width="500" alt="Screenshot 2025-04-03 at 2 53 14 PM" src="https://github.com/user-attachments/assets/38cd4325-f6bd-448e-aa32-855653024e3e" />
+
+
+
+
+
+
+**The application will be available at** 🌍 `http://localhost:3000`.
 
 ## 📂 Project Structure
 
